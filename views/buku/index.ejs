@@ -1,0 +1,111 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">MASTER DATA</div>
+            <h1>Kelola Buku</h1>
+            <p class="muted">Daftar seluruh koleksi buku perpustakaan terintegrasi.</p>
+        </div>
+        <div>
+            <a href="/buku/new" class="btn btn-primary">+ Tambah Buku Baru</a>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-heading">
+            <h2>Daftar Koleksi Buku</h2>
+            <input type="text" id="tableSearch" class="search" placeholder="Cari buku...">
+        </div>
+        
+        <div class="table-wrap">
+            <table id="booksTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ISBN</th>
+                        <th>Judul & Penulis</th>
+                        <th>Kategori</th>
+                        <th>Tahun</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                        <th>Status</th>
+                        <th>Tanggal Masuk</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (books && books.length > 0) { %>
+                        <% books.forEach((book, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td class="isbn"><%= book.isbn %></td>
+                                <td>
+                                    <strong><%= book.judul %></strong>
+                                    <small class="cell-sub">
+                                        <%= book.penulis %> · <%= book.penerbit %>
+                                    </small>
+                                </td>
+                                <td><%= book.kategori %></td>
+                                <td><%= book.tahun_terbit %></td>
+                                <td><%= Number(book.stok).toLocaleString('id-ID') %></td>
+                                <td>
+                                    Rp <%= Number(book.harga).toLocaleString('id-ID', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }) %>
+                                </td>
+                                
+                                <!-- Status berdasarkan ketersediaan stok -->
+                                <td>
+                                    <span class="status <%= Number(book.stok) > 0 ? 'available' : 'inactive' %>">
+                                        <%= Number(book.stok) > 0 ? 'Tersedia' : 'Habis' %>
+                                    </span>
+                                </td>
+
+                                <!-- Tanggal masuk -->
+                                <td>
+                                    <%= new Date(book.tanggal_masuk + 'T00:00:00')
+                                        .toLocaleDateString('id-ID', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        }) %>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <a
+                                            class="btn btn-small btn-edit"
+                                            href="/buku/<%= book.id %>/edit"
+                                        >Edit</a>
+
+                                        <form
+                                            action="/buku/<%= book.id %>?_method=DELETE"
+                                            method="POST"
+                                            class="delete-form"
+                                            data-title="<%= book.judul %>"
+                                        >
+                                            <button
+                                                class="btn btn-small btn-delete"
+                                                type="submit"
+                                            >Hapus</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="10" style="text-align: center; padding: 2rem;">Belum ada data buku tersedia.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-note">
+            Menampilkan seluruh data buku dari basis data MySQL.
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

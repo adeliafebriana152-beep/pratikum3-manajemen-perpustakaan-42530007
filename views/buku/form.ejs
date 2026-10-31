@@ -1,0 +1,95 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">MASTER DATA / BUKU</div>
+            <h1><%= pageTitle %></h1>
+            <p class="muted">Lengkapi informasi buku berikut dengan benar.</p>
+        </div>
+        <div>
+            <a href="/buku" class="btn btn-secondary">Kembali</a>
+        </div>
+    </div>
+
+    <div class="form-panel">
+        <form action="<%= formAction %>" method="POST">
+            
+            
+            <div style="margin-bottom: 1.5rem;">
+                <span class="eyebrow">01</span>
+                <h3 style="font-size: 1.2rem; color: #1e293b; margin-bottom: 0.25rem;">Informasi Buku</h3>
+                <p class="muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Identitas koleksi perpustakaan.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="isbn">ISBN *</label>
+                <input type="text" id="isbn" name="isbn" class="form-control" value="<%= book.isbn || '' %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="judul">Judul Buku *</label>
+                <input type="text" id="judul" name="judul" class="form-control" value="<%= book.judul || '' %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="penulis">Penulis *</label>
+                <input type="text" id="penulis" name="penulis" class="form-control" value="<%= book.penulis || '' %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="penerbit">Penerbit *</label>
+                <input type="text" id="penerbit" name="penerbit" class="form-control" value="<%= book.penerbit || '' %>" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="tahun_terbit">Tahun Terbit *</label>
+                    <input type="number" id="tahun_terbit" name="tahun_terbit" class="form-control" value="<%= book.tahun_terbit || '' %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="kategori">Kategori *</label>
+                    <select id="kategori" name="kategori" class="form-control" required>
+                        <% const categories = ['Pendidikan', 'Teknologi', 'Sejarah', 'Sains', 'Agama', 'Hukum', 'Referensi', 'Lainnya']; %>
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat %>" <%= book.kategori === cat ? 'selected' : '' %>><%= cat %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+
+            
+            <div style="margin: 2rem 0 1.5rem 0; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                <span class="eyebrow">02</span>
+                <h3 style="font-size: 1.2rem; color: #1e293b; margin-bottom: 0.25rem;">Informasi Inventaris</h3>
+                <p class="muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Stok, harga, dan tanggal masuk buku.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="stok">Stok Eksemplar *</label>
+                    <input type="number" id="stok" name="stok" class="form-control" value="<%= book.stok || 0 %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="harga">Harga (Rp) *</label>
+                    <input type="number" step="0.01" id="harga" name="harga" class="form-control" value="<%= book.harga || 0 %>" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tanggal_masuk">Tanggal Masuk *</label>
+                <input type="date" id="tanggal_masuk" name="tanggal_masuk" class="form-control" value="<%= book.tanggal_masuk ? new Date(book.tanggal_masuk).toISOString().slice(0, 10) : '' %>" required>
+            </div>
+
+            <div class="form-actions" style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary"><%= submitLabel || 'Simpan Perubahan' %></button>
+                <a href="/buku" class="btn" style="background-color: #e2e8f0; color: #333;">Batal</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
